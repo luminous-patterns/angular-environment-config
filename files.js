@@ -21,12 +21,12 @@ module.exports = {
     ],
 
     testUtils: [
-        'test/testUtils.js',
+        // 'test/testUtils.js',
     ],
 
     test: [
-        'test/*Spec.js',
-        'test/compat/matchers.js',
+        'test/*-spec.js',
+        // 'test/compat/matchers.js',
     ],
 
     angular: function (version) {
@@ -35,5 +35,5 @@ module.exports = {
             'lib/angular-' + version + '/angular-mocks.js',
         ];
     },
-    
+
 };

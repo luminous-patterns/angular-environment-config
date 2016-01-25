@@ -1,4 +1,4 @@
-'use strict';
+/* globals require */
 
 var Q = require('q');
 var shjs = require('shelljs');
@@ -17,12 +17,12 @@ var metaBanner = '\
 var concatBanner = '\
 <%= meta.banner %>\n\
 \n\
-(function (window, angular, undefined) {\n';
+(function (window, angular, undefined) {"use strict";\n';
 
-var concatFooter = '})(window, window.angular);';
+var concatFooter = '\n\n})(window, window.angular);';
 
-/*global module:false*/
-module.exports = function (grunt) {
+/* global module:false */
+module.exports = function (grunt) {"use strict";
 
     require('load-grunt-tasks')(grunt);
 
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
             exclude: [],
             frameworks: ['jasmine'],
             reporters: 'dots',
-            port: 8080,
+            port: 8185,
             colors: true,
             autoWatch: false,
             autoWatchInterval: 0,
@@ -65,11 +65,11 @@ module.exports = function (grunt) {
         debug: {
             singleRun: false,
             background: false,
-            browsers: [ grunt.option('browser') || 'Chrome' ],
+            browsers: [grunt.option('browser') || 'Chrome'],
         },
         background: {
             background: true,
-            browsers: [ grunt.option('browser') || 'PhantomJS' ],
+            browsers: [grunt.option('browser') || 'PhantomJS'],
         },
         watch: {
             singleRun: false,
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
         karmaTaskConfig[taskName] = {
             configFile: karmaConfigFiles[taskName],
         };
-    })
+    });
 
 
     /**
@@ -135,6 +135,8 @@ module.exports = function (grunt) {
             all: files.jsHint,
             options: {
                 eqnull: true,
+                multistr: true,
+                eqeqeq: true,
             },
         },
 
@@ -147,7 +149,7 @@ module.exports = function (grunt) {
             server: {},
             sample: {
                 options: {
-                    port: 8888,
+                    port: 5555,
                     keepalive: true,
                 },
             },
@@ -163,36 +165,36 @@ module.exports = function (grunt) {
      */
 
     grunt.registerTask(
-        'integrate', 
+        'integrate',
         ['build', 'jshint'].concat(karmaTasks)
     );
 
     grunt.registerTask(
-        'default', 
+        'default',
         ['build', 'jshint', 'karma:unit']
     );
 
     grunt.registerTask(
-        'build', 
-        'Perform a normal build', 
+        'build',
+        'Perform a normal build',
         ['concat', 'uglify']
     );
 
     grunt.registerTask(
-        'dist', 
-        'Perform a clean build', 
+        'dist',
+        'Perform a clean build',
         ['clean', 'build']
     );
 
     grunt.registerTask(
-        'release', 
-        'Tag and perform a release', 
+        'release',
+        'Tag and perform a release',
         ['prepare-release', 'dist', 'perform-release']
     );
 
     grunt.registerTask(
-        'dev', 
-        'Run dev server and watch for changes', 
+        'dev',
+        'Run dev server and watch for changes',
         ['build', 'connect:server', 'karma:background', 'watch']
     );
 
@@ -241,9 +243,9 @@ module.exports = function (grunt) {
 
         }
 
-        var done = task.async();
+        var done = grunt.task.async();
 
-        assertCleanMaster()
+        ensureCleanMaster()
             .then(searchForExistingTag)
             .then(setGruntConfig)
             .then(function () {
@@ -273,7 +275,7 @@ module.exports = function (grunt) {
             return system('git tag \'' + version + '\'');
         }
 
-        var done = task.async();
+        var done = grunt.task.async();
 
         stageReleaseDir()
             .then(commitStagedFiles)

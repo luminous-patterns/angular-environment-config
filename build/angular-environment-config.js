@@ -1,3 +1,123 @@
+/**
+ * Environment configuration module for AngularJS
+ * @version v1.0.0-rc.1-dev-2016-01-25
+ * @link https://github.com/luminous-patterns/angular-environment-config
+ * @license MIT License, http://www.opensource.org/licenses/MIT
+ */
+
+(function (window, angular, undefined) {"use strict";
+
+
+/* Constants */
+
+var ERR_UNKNOWN = 'ERR_UNKNOWN';
+var ERR_NO_MATCH_FOUND = 'ERR_NO_MATCH_FOUND';
+var ERR_HOSTNAME_UNDEFINED = 'ERR_HOSTNAME_UNDEFINED';
+var ERR_NO_SUCH_ENVIRONMENT = 'ERR_NO_SUCH_ENVIRONMENT';
+
+
+/* Read-only property setter */
+
+function addReadonly (props) {
+
+    return {
+
+        to: function (object) {
+
+            var keys = Object.keys(props);
+            keys.forEach(function (key) {
+
+                Object.defineProperty(object, key, {
+                    value: props[key],
+                    writable: false,
+                    enumerable: true,
+                    configurable: false,
+                });
+
+            });
+
+        },
+
+    };
+
+}
+
+
+/* EnvLookupError */
+
+function EnvLookupError (e) {
+
+    e = e || {};
+
+    var code = e.code || ERR_UNKNOWN;
+    var hostname = e.hostname || '';
+
+    var message = e.message || 'Environment lookup failed: ' + code;
+    Error.call(this, message);
+
+    this.code = code;
+    this.hostname = hostname;
+
+}
+
+EnvLookupError.prototype = Object.create(Error.prototype);
+EnvLookupError.prototype.constructor = EnvLookupError;
+
+
+/* EnvAlreadyExistsError */
+
+function EnvAlreadyExistsError (e) {
+
+    e = e || {};
+
+    var environmentName = e.environmentName || '';
+    var message = 'Environment "' + environmentName + '" already exists';
+
+    Error.call(this, message);
+
+    this.code = ERR_ENVIRONMENT_ALREADY_EXISTS;
+    this.environmentName = environmentName;
+
+}
+
+EnvAlreadyExistsError.prototype = Object.create(Error.prototype);
+EnvAlreadyExistsError.prototype.constructor = EnvAlreadyExistsError;
+
+
+/* UnknownEnvNameError */
+
+function UnknownEnvNameError (e) {
+
+    e = e || {};
+
+    var environmentName = e.environmentName || '';
+
+    var message = 'No config for environment name "' + environmentName + '"';
+    Error.call(this, message);
+
+    this.code = ERR_NO_SUCH_ENVIRONMENT;
+    this.environmentName = environmentName;
+
+}
+
+UnknownEnvNameError.prototype = Object.create(Error.prototype);
+UnknownEnvNameError.prototype.constructor = UnknownEnvNameError;
+
+angular.module('luminous.environment', []);
+AppEnvironmentConfigFactory.$inject = [];
+function AppEnvironmentConfigFactory () {
+
+    function AppEnvironmentConfig (props) {
+        addReadonly(props).to(this);
+    }
+
+    return AppEnvironmentConfig;
+
+}
+
+angular
+    .module('luminous.environment')
+    .factory('AppEnvironmentConfig', AppEnvironmentConfigFactory);
 appEnvironmentProvider.$inject = [];
 function appEnvironmentProvider () {
 
@@ -224,3 +344,5 @@ function appEnvironmentProvider () {
 angular
     .module('luminous.environment')
     .provider('appEnvironment', appEnvironmentProvider);
+
+})(window, window.angular);

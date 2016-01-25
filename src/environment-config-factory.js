@@ -1,5 +1,5 @@
-LuminousEnvironmentConfigFactory.$inject = [];
-function LuminousEnvironmentConfigFactory () {
+AppEnvironmentConfigFactory.$inject = [];
+function AppEnvironmentConfigFactory () {
 
     function AppEnvironmentConfig (props) {
         addReadonly(props).to(this);
