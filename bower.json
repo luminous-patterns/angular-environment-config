@@ -20,9 +20,14 @@
   ],
   "ignore": [
     "**/.*",
-    "node_modules",
     "bower_components",
+    "node_modules",
+    "package.json",
+    "files.js",
+    "config",
+    "lib",
     "test",
-    "tests"
+    "tests",
+    "Gruntfile.js"
   ]
 }

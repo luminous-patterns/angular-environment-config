@@ -9,7 +9,7 @@
     "config",
     "cfg"
   ],
-  "version": "1.0.0",
+  "version": "1.0.0-rc.1",
   "homepage": "https://github.com/luminous-patterns/angular-environment-config",
   "author": {
     "name": "Cal Milne",
@@ -29,5 +29,25 @@
       "url": "https://github.com/luminous-patterns/angular-environment-config/blob/master/LICENSE"
     }
   ],
-  "main": "release/angular-environment-config.js"
+  "main": "release/angular-environment-config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "faithful-exec": "^0.1.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-connect": "^0.11.2",
+    "grunt-contrib-jshint": "^0.12.0",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-karma": "^0.12.1",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "load-grunt-tasks": "^3.4.0",
+    "q": "^1.4.1",
+    "shelljs": "^0.5.3"
+  }
 }
