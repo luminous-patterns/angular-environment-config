@@ -1,0 +1,28 @@
+{
+  "name": "angular-environment-config",
+  "description": "Environment configuration module for AngularJS",
+  "main": "release/angular-environment-config.js",
+  "license": "MIT",
+  "keywords": [
+    "AngularJS",
+    "environment",
+    "env",
+    "configuration",
+    "config",
+    "cfg"
+  ],
+  "homepage": "https://github.com/luminous-patterns/angular-environment-config",
+  "dependencies": {
+    "angular": ">= 1.2.0"
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

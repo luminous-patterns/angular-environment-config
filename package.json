@@ -1,0 +1,33 @@
+{
+  "name": "angular-environment-config",
+  "description": "Environment configuration module for AngularJS",
+  "keywords": [
+    "AngularJS",
+    "environment",
+    "env",
+    "configuration",
+    "config",
+    "cfg"
+  ],
+  "version": "1.0.0",
+  "homepage": "https://github.com/luminous-patterns/angular-environment-config",
+  "author": {
+    "name": "Cal Milne",
+    "email": "cal@calmilne.com",
+    "web": "https://github.com/luminous-patterns"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luminous-patterns/angular-environment-config.git"
+  },
+  "bugs": {
+    "url": "https://github.com/luminous-patterns/angular-environment-config/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/luminous-patterns/angular-environment-config/blob/master/LICENSE"
+    }
+  ],
+  "main": "release/angular-environment-config.js"
+}
