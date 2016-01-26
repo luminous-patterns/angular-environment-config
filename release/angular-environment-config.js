@@ -1,6 +1,6 @@
 /**
  * Environment configuration module for AngularJS
- * @version v1.0.0-rc.1
+ * @version v1.0.0-rc.2
  * @link https://github.com/luminous-patterns/angular-environment-config
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -14,6 +14,7 @@ var ERR_UNKNOWN = 'ERR_UNKNOWN';
 var ERR_NO_MATCH_FOUND = 'ERR_NO_MATCH_FOUND';
 var ERR_HOSTNAME_UNDEFINED = 'ERR_HOSTNAME_UNDEFINED';
 var ERR_NO_SUCH_ENVIRONMENT = 'ERR_NO_SUCH_ENVIRONMENT';
+var ERR_ENVIRONMENT_ALREADY_EXISTS = 'ERR_ENVIRONMENT_ALREADY_EXISTS';
 
 
 /* Read-only property setter */
@@ -52,9 +53,7 @@ function EnvLookupError (e) {
     var code = e.code || ERR_UNKNOWN;
     var hostname = e.hostname || '';
 
-    var message = e.message || 'Environment lookup failed: ' + code;
-    Error.call(this, message);
-
+    this.message = e.message || 'Environment lookup failed: ' + code;
     this.code = code;
     this.hostname = hostname;
 
@@ -71,9 +70,8 @@ function EnvAlreadyExistsError (e) {
     e = e || {};
 
     var environmentName = e.environmentName || '';
-    var message = 'Environment "' + environmentName + '" already exists';
 
-    Error.call(this, message);
+    this.message = 'Environment "' + environmentName + '" already exists';
 
     this.code = ERR_ENVIRONMENT_ALREADY_EXISTS;
     this.environmentName = environmentName;
@@ -92,9 +90,7 @@ function UnknownEnvNameError (e) {
 
     var environmentName = e.environmentName || '';
 
-    var message = 'No config for environment name "' + environmentName + '"';
-    Error.call(this, message);
-
+    this.message = 'No config for environment name "' + environmentName + '"';
     this.code = ERR_NO_SUCH_ENVIRONMENT;
     this.environmentName = environmentName;
 
@@ -118,8 +114,8 @@ function AppEnvironmentConfigFactory () {
 angular
     .module('luminous.environment')
     .factory('AppEnvironmentConfig', AppEnvironmentConfigFactory);
-appEnvironmentProvider.$inject = [];
-function appEnvironmentProvider () {
+$appEnvironmentProvider.$inject = [];
+function $appEnvironmentProvider () {
 
     var defaultEnvironmentName;
     
@@ -199,22 +195,8 @@ function appEnvironmentProvider () {
         }
 
         throw new TypeError(
-            '1st argument must be a string OR an instance of RegExp'
+            'A hostname MUST be a string OR an instance of RegExp'
         );
-
-    }
-
-    function getWindowLocationHostname () {
-
-        var hostname = window.location.hostname;
-
-        if ('string' !== typeof hostname) {
-            throw new TypeError(
-                'Unexpected (non-string) value for window.location.hostname'
-            );
-        }
-
-        return hostname;
 
     }
 
@@ -234,10 +216,8 @@ function appEnvironmentProvider () {
 
         hostnames.forEach(function (hostname) {
 
-            var regExp = parseHostname(hostname);
-
             this.useConfigFor(environmentName)
-                .whenHostnameMatches(regExp);
+                .whenHostnameMatches(hostname);
 
         }, this);
 
@@ -247,20 +227,29 @@ function appEnvironmentProvider () {
 
     this.useConfigFor = function (environmentName) {
         return {
-            whenHostnameMatches: function (regExp) {
+            whenHostnameMatches: function (hostname) {
+
+                var regExp = parseHostname(hostname);
+
                 hostnameRules.unshift({
                     regExp: regExp,
                     environmentName: environmentName,
                 });
+
             },
         };
+    };
+
+    this.unsetDefaultEnvironmentName = function () {
+        defaultEnvironmentName = undefined;
+        return this;
     };
 
     this.defaultEnvironmentName = function (newValue) {
 
         if ('string' !== typeof newValue) {
             throw new TypeError(
-                '1st argument must be a string'
+                'Default environment name must be a string'
             );
         }
 
@@ -287,8 +276,8 @@ function appEnvironmentProvider () {
 
     };
 
-    this.$get = ['AppEnvironmentConfig', 
-        function (AppEnvironmentConfig) {
+    this.$get = ['AppEnvironmentConfig', '$location',
+        function (AppEnvironmentConfig,   $location) {
 
             function AppEnvironment (hostname) {
 
@@ -337,7 +326,7 @@ function appEnvironmentProvider () {
                 return this.environmentName === environmentName;
             };
 
-            return new AppEnvironment(getWindowLocationHostname());
+            return new AppEnvironment($location.host());
 
         }
     ];
@@ -346,6 +335,6 @@ function appEnvironmentProvider () {
 
 angular
     .module('luminous.environment')
-    .provider('appEnvironment', appEnvironmentProvider);
+    .provider('$appEnvironment', $appEnvironmentProvider);
 
 })(window, window.angular);
