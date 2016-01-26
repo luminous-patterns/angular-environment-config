@@ -6,6 +6,7 @@ var ERR_UNKNOWN = 'ERR_UNKNOWN';
 var ERR_NO_MATCH_FOUND = 'ERR_NO_MATCH_FOUND';
 var ERR_HOSTNAME_UNDEFINED = 'ERR_HOSTNAME_UNDEFINED';
 var ERR_NO_SUCH_ENVIRONMENT = 'ERR_NO_SUCH_ENVIRONMENT';
+var ERR_ENVIRONMENT_ALREADY_EXISTS = 'ERR_ENVIRONMENT_ALREADY_EXISTS';
 
 
 /* Read-only property setter */
@@ -44,9 +45,7 @@ function EnvLookupError (e) {
     var code = e.code || ERR_UNKNOWN;
     var hostname = e.hostname || '';
 
-    var message = e.message || 'Environment lookup failed: ' + code;
-    Error.call(this, message);
-
+    this.message = e.message || 'Environment lookup failed: ' + code;
     this.code = code;
     this.hostname = hostname;
 
@@ -63,9 +62,8 @@ function EnvAlreadyExistsError (e) {
     e = e || {};
 
     var environmentName = e.environmentName || '';
-    var message = 'Environment "' + environmentName + '" already exists';
 
-    Error.call(this, message);
+    this.message = 'Environment "' + environmentName + '" already exists';
 
     this.code = ERR_ENVIRONMENT_ALREADY_EXISTS;
     this.environmentName = environmentName;
@@ -84,9 +82,7 @@ function UnknownEnvNameError (e) {
 
     var environmentName = e.environmentName || '';
 
-    var message = 'No config for environment name "' + environmentName + '"';
-    Error.call(this, message);
-
+    this.message = 'No config for environment name "' + environmentName + '"';
     this.code = ERR_NO_SUCH_ENVIRONMENT;
     this.environmentName = environmentName;
 
