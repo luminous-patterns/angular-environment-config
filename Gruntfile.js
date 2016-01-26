@@ -243,7 +243,7 @@ module.exports = function (grunt) {"use strict";
             .then(function () {
                 done();
             })
-            .catch(handleError.bind(undefined, done))
+            .catch(handleAsyncError.bind(undefined, done))
             .done();
 
     }
@@ -275,7 +275,7 @@ module.exports = function (grunt) {"use strict";
             .then(function () {
                 done();
             })
-            .catch(handleError.bind(undefined, done))
+            .catch(handleAsyncError.bind(undefined, done))
             .done();
 
     }
@@ -286,10 +286,21 @@ module.exports = function (grunt) {"use strict";
      */
 
     function exec (cmd) {
-        return Q(faithfulExec(cmd));
+
+        var deferred = Q.defer();
+
+        faithfulExec(cmd)
+            .then(function (result) {
+                deferred.resolve(result);
+            }, function (result) {
+                deferred.reject(result);
+            });
+
+        return deferred.promise;
+
     }
 
-    function handleError (done, error) {
+    function handleAsyncError (done, error) {
 
         done = done || function () { };
 
