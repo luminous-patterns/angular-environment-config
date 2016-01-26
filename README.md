@@ -1,6 +1,8 @@
-# angular-environment-config
+# angular-environment-config [![Build Status](https://travis-ci.org/luminous-patterns/angular-environment-config.svg?branch=master)](https://travis-ci.org/luminous-patterns/angular-environment-config)
 
-Hostname based environment configuration module for AngularJS
+*Hostname based environment configuration module for AngularJS*
+
+## Contents
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -10,27 +12,28 @@ Hostname based environment configuration module for AngularJS
   * [Service - $appEnvironment](#service)
 
 
-### Installation
+## Installation
 
 Install using **Bower**
 ```sh
 $ bower install angular-environment-config --save
 ```
 
-### Usage
+## Usage
 
 1. Add it as a dependency for your AngularJS app
-2. Configure your environments using the `$environmentConfigProvider`
+2. Configure your environments during config phase using the `$environmentConfigProvider`
 3. Access the config variables for the current environment via the `$environmentConfig` service 
 
 
-#### Example
+## Example
 
 ```javascript
-angular
-    .module('myWebApp', [
-        'luminous.environment',
-    ])
+angular.module('myWebApp', [
+    'luminous.environment',
+]);
+
+angular.module('myWebApp')
     .config(myWebAppConfig)
     .controller('MainViewController', MainViewController);
 
@@ -67,9 +70,18 @@ function myWebAppConfig (  $appEnvironmentProvider){
 MainViewController.$inject = ['$appEnvironment', '$document'];
 function MainViewController (  $appEnvironment,   $document) {
     
+    // Set the document title
+    
     $document[0].title = $appEnvironment.config.titlePrefix
         + 'My App - Powered by things, that do things!';
     
+
+    // The the local environment will now have the document title:
+    //     LOCAL :: My App - Powered by things, that do things!
+
+    // Whereas the live environment will now have the document title:
+    //     My App - Powered by things, that do things!
+
 }
 ```
 
