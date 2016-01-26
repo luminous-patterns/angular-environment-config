@@ -71,6 +71,7 @@ module.exports = function (grunt) {"use strict";
         },
         background: {
             background: true,
+            singleRun: false,
             browsers: karmaHeadless,
         },
         watch: {
