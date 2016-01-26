@@ -37,7 +37,6 @@ module.exports = function (grunt) {"use strict";
         ng149: 'config/karma-1.4.9.js',
         ng130: 'config/karma-1.3.0.js',
         ng1214: 'config/karma-1.2.14.js',
-        ng115: 'config/karma-1.1.5.js',
     };
 
     var karmaTaskNames = Object.keys(karmaConfigFiles);
