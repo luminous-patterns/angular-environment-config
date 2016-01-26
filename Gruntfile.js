@@ -138,8 +138,9 @@ module.exports = function (grunt) {"use strict";
             all: files.jsHint,
             options: {
                 eqnull: true,
-                multistr: true,
                 eqeqeq: true,
+                multistr: true,
+                validthis: true,
             },
         },
 
