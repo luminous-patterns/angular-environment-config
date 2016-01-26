@@ -116,7 +116,7 @@ module.exports = function (grunt) {"use strict";
 
         uglify: {
             options: {
-                banner: '<%= meta.banner %>',
+                banner: '<%= meta.banner %>\n',
             },
             build: {
                 files: {
