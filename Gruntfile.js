@@ -101,7 +101,7 @@ module.exports = function (grunt) {"use strict";
             banner: metaBanner,
         },
 
-        clean: [ '<%= buildDir %>' ],
+        clean: ['<%= buildDir %>'],
 
         concat: {
             options: {
@@ -116,7 +116,7 @@ module.exports = function (grunt) {"use strict";
 
         uglify: {
             options: {
-                banner: '<%= meta.banner =>',
+                banner: '<%= meta.banner %>',
             },
             build: {
                 files: {
@@ -221,7 +221,7 @@ module.exports = function (grunt) {"use strict";
         }
 
         function searchForExistingTag () {
-            return exec('git tag -l \'' + version + '\'');
+            return exec('git tag -l \"' + version + '\"');
         }
 
         function setGruntConfig (searchResult) {
@@ -256,15 +256,15 @@ module.exports = function (grunt) {"use strict";
         var releaseDir = grunt.config('buildDir');
 
         function stageReleaseDir () {
-            return system('git add \'' + releaseDir + '\'');
+            return system('git add \"' + releaseDir + '\"');
         }
 
         function commitStagedFiles () {
-            return system('git commit -m \'release ' + version + '\'');
+            return system('git commit -m \"release ' + version + '\"');
         }
 
         function createTag () {
-            return system('git tag \'' + version + '\'');
+            return system('git tag \"' + version + '\"');
         }
 
         var done = this.async();
