@@ -150,17 +150,17 @@ function appEnvironmentProvider () {
 
     };
 
-    this.setDefaultProp = function (key, value) {
+    this.setDefault = function (key, value) {
         defaultConfig[key] = value;
         return this;
     };
 
-    this.setDefaultProps = function (props) {
+    this.setDefaults = function (properties) {
 
-        var keys = Object.keys(props);
+        var keys = Object.keys(properties);
 
         keys.forEach(function (key) {
-            this.setDefaultProp(key, props[key]);
+            this.setDefault(key, properties[key]);
         }, this);
 
         return this;
@@ -172,11 +172,10 @@ function appEnvironmentProvider () {
 
             function AppEnvironment (hostname) {
 
-                var name;
-                var hostnameMatch = false;
+                var environmentName;
 
                 try {
-                    name = getEnvironmentNameForHostname(hostname);
+                    environmentName = getEnvironmentNameForHostname(hostname);
                 }
                 catch (error) {
 
@@ -187,9 +186,7 @@ function appEnvironmentProvider () {
                         undefined !== defaultEnvironmentName) {
 
                         handled = true;
-                        
-                        name = defaultEnvironmentName;
-                        hostnameMatch = true;
+                        environmentName = defaultEnvironmentName;
 
                     }
 
@@ -199,20 +196,26 @@ function appEnvironmentProvider () {
 
                 }
 
+                var isDefault = environmentName === defaultEnvironmentName;
+
                 var config = new AppEnvironmentConfig(
-                    createFinalConfigForEnvironment(name)
+                    createFinalConfigForEnvironment(environmentName)
                 );
 
                 var props = {
-                    'name': name,
-                    'config': config,
+                    'environmentName': environmentName,
+                    'isDefault': isDefault,
                     'hostname': hostname,
-                    'hostnameMatch': hostnameMatch,
+                    'config': config,
                 };
 
                 addReadonly(props).to(this);
 
             }
+
+            AppEnvironment.prototype.is = function (environmentName) {
+                return this.environmentName === environmentName;
+            };
 
             return new AppEnvironment(getWindowLocationHostname());
 

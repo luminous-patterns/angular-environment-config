@@ -46,6 +46,9 @@ module.exports = function (grunt) {"use strict";
         return 'karma:' + taskName;
     });
 
+    var karmaHeadless = [grunt.option('browser') || 'PhantomJS'];
+    var karmaChrome = [grunt.option('browser') || 'Chrome'];
+
     var karmaTaskConfig = {
         options: {
             configFile: karmaConfigFiles[karmaTaskNames[0]],
@@ -53,23 +56,23 @@ module.exports = function (grunt) {"use strict";
             exclude: [],
             frameworks: ['jasmine'],
             reporters: 'dots',
-            port: 8185,
+            port: 8080,
             colors: true,
             autoWatch: false,
-            autoWatchInterval: 0,
-            browsers: [grunt.option('browser') || 'PhantomJS'],
+            autoWatchatchInterval: 0,
+            browsers: karmaHeadless,
         },
         unit: {
-            browsers: [grunt.option('browser') || 'PhantomJS'],
+            browsers: karmaHeadless,
         },
         debug: {
             singleRun: false,
             background: false,
-            browsers: [grunt.option('browser') || 'Chrome'],
+            browsers: karmaChrome,
         },
         background: {
             background: true,
-            browsers: [grunt.option('browser') || 'PhantomJS'],
+            browsers: karmaHeadless,
         },
         watch: {
             singleRun: false,
@@ -147,12 +150,6 @@ module.exports = function (grunt) {"use strict";
 
         connect: {
             server: {},
-            sample: {
-                options: {
-                    port: 5555,
-                    keepalive: true,
-                },
-            },
         },
 
         karma: karmaTaskConfig,
@@ -196,12 +193,6 @@ module.exports = function (grunt) {"use strict";
         'dev',
         'Run dev server and watch for changes',
         ['build', 'connect:server', 'karma:background', 'watch']
-    );
-
-    grunt.registerTask(
-        'sample',
-        'Run connect server with keepalive:true for sample app development',
-        ['connect:sample']
     );
 
     grunt.registerTask(

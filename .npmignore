@@ -1,0 +1,12 @@
+# Any hidden files
+**/.*
+
+# Build related stuff
+/config
+/lib
+/test
+Gruntfile.js
+files.js
+
+# Package managers
+bower.json
