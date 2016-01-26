@@ -13,7 +13,7 @@
   ],
   "homepage": "https://github.com/luminous-patterns/angular-environment-config",
   "dependencies": {
-    "angular": ">= 1.2.0"
+    "angular": ">= 1.1.0"
   },
   "moduleType": [
     "globals"
