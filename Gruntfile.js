@@ -235,7 +235,7 @@ module.exports = function (grunt) {"use strict";
 
         }
 
-        var done = grunt.task.async();
+        var done = this.async();
 
         ensureCleanMaster()
             .then(searchForExistingTag)
@@ -267,7 +267,7 @@ module.exports = function (grunt) {"use strict";
             return system('git tag \'' + version + '\'');
         }
 
-        var done = grunt.task.async();
+        var done = this.async();
 
         stageReleaseDir()
             .then(commitStagedFiles)

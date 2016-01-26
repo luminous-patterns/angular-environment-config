@@ -30,6 +30,9 @@
     }
   ],
   "main": "release/angular-environment-config.js",
+  "engines": {
+    "node": ">4 <5"
+  },
   "dependencies": {},
   "devDependencies": {
     "faithful-exec": "^0.1.0",
