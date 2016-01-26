@@ -324,15 +324,14 @@ module.exports = function (grunt) {"use strict";
 
         return exec(cmd)
             .then(handleStdout)
-            .catch(handleStderr)
-            .done();
+            .catch(handleStderr);
 
     }
 
     function ensureCleanMaster () {
 
         function assertMasterAndSetStatusPorcelain (result) {
-            
+
             if ('refs/heads/master' !== result.stdout.trim()) {
                 throw new Error('Not on master branch, aborting');
             }
@@ -349,8 +348,7 @@ module.exports = function (grunt) {"use strict";
 
         return exec('git symbolic-ref HEAD')
             .then(assertMasterAndSetStatusPorcelain)
-            .then(assertCleanWorkingCopy)
-            .done();
+            .then(assertCleanWorkingCopy);
 
     }
 
