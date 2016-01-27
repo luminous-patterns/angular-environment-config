@@ -1,6 +1,6 @@
 /**
  * Environment configuration module for AngularJS
- * @version v1.0.0-rc.2
+ * @version v1.0.0
  * @link https://github.com/luminous-patterns/angular-environment-config
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
@@ -202,6 +202,12 @@ function $appEnvironmentProvider () {
 
     this.addEnvironment = function (environmentName, hostnames, config) {
 
+        if ('string' !== typeof environmentName) {
+            throw new TypeError(
+                '1st argument must be a string'
+            );
+        }
+
         if (hasConfigForEnvironment(environmentName)) {
             throw new EnvAlreadyExistsError({
                 environmentName: environmentName,
@@ -226,6 +232,13 @@ function $appEnvironmentProvider () {
     };
 
     this.useConfigFor = function (environmentName) {
+
+        if ('string' !== typeof environmentName) {
+            throw new TypeError(
+                '1st argument must be a string'
+            );
+        }
+
         return {
             whenHostnameMatches: function (hostname) {
 
@@ -238,6 +251,7 @@ function $appEnvironmentProvider () {
 
             },
         };
+
     };
 
     this.unsetDefaultEnvironmentName = function () {
