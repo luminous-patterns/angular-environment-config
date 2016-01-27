@@ -30,7 +30,7 @@
     "tests",
     "Gruntfile.js"
   ],
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "authors": [
     "Cal Milne <cal@calmilne.com>"
   ]

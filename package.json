@@ -9,7 +9,7 @@
     "config",
     "cfg"
   ],
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "homepage": "https://github.com/luminous-patterns/angular-environment-config",
   "author": {
     "name": "Cal Milne",
