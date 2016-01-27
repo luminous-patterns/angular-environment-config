@@ -148,8 +148,6 @@ Parameter | Type | Description
 
 *`$appEnvironmentProvider`*
 
-###### Example
-
 
 
 -----------------
@@ -187,7 +185,17 @@ $appEnvironmentProvider
     .defaultEnvironmentName('local');
 ```
 
-***Important note:*** If a default environment name is not specified, the $appEnvironment service will throw an `EnvLookupError` during init.
+*Important note:* If a default environment name is not specified, and the current hostname does not match a configured host name, the $appEnvironment service will throw an `EnvLookupError` during init.
+
+###### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**environmentName** | `String` | The internal name of the environment to use when all else fails (e.g. local)
+
+###### Returns
+
+*`$appEnvironmentProvider`*
 
 
 
