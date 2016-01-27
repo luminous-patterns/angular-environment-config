@@ -52,6 +52,21 @@ describe('AppEnvironment', function () {
 
     describe('provider', function () {
 
+        it('should throw an error when attempting to use an environment name which is not a string', function () {
+
+            expect(function () {
+                _$appEnvironmentProvider_
+                    .addEnvironment(null, 'some.env', {});
+            }).toThrowError('1st argument must be a string');
+
+            expect(function () {
+                _$appEnvironmentProvider_
+                    .useConfigFor(null)
+                        .whenHostnameMatches('some.env');
+            }).toThrowError('1st argument must be a string');
+
+        });
+
         it('should throw an error when an environment hostname is not a string or RegExp', function () {
             
             expect(function () {
@@ -101,11 +116,41 @@ describe('AppEnvironment', function () {
             
         });
 
+        it('should automagically convert RegExps to case-insensitive for environment hostname matches', inject(function ($location, $injector) {
+
+            fakeHostname = 'www.somedomain.com';
+
+            _$appEnvironmentProvider_
+                .addEnvironment('regExpCase', /^[W]{3}\.SomeDomain\.Com/, {});
+
+            _$appEnvironment_ = $injector.invoke(
+                _$appEnvironmentProvider_.$get
+            );
+
+            expect(_$appEnvironment_.environmentName).toBe('regExpCase');
+
+        }));
+
     });
 
     describe('service', function () {
 
         describe('in any case', function () {
+
+            it('should correctly resolve environments defined with RegExp hostname', inject(function ($location, $injector) {
+
+                fakeHostname = 'foohost-123.somedomain.com';
+
+                _$appEnvironmentProvider_
+                    .addEnvironment('wildcard', /^[a-z0-9-]+\.somedomain\.com/, {});
+
+                _$appEnvironment_ = $injector.invoke(
+                    _$appEnvironmentProvider_.$get
+                );
+
+                expect(_$appEnvironment_.environmentName).toBe('wildcard');
+
+            }));
 
             it('should use the current $location.host() as the value for hostname', inject(function ($location) {
                 expect(_$appEnvironment_.hostname).toBe($location.host());
@@ -118,7 +163,7 @@ describe('AppEnvironment', function () {
                 }));
             });
 
-            it('should not allow `config` properties to be reset ', function () {
+            it('should not allow `config` properties to be reset', function () {
                 _$appEnvironment_.config.foo = 'bix';
                 expect(_$appEnvironment_.config.foo).toBe('bar');
             });

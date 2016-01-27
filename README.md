@@ -4,29 +4,45 @@
 
 ## Contents
 
-* [Installation](#installation)
-* [Usage](#usage)
-* [Example](#example)
+* [Installation](#get-it)
+* [Usage](#use-it)
+* [Example](#stare-intently-at-this-example-of-it)
 * [API](#api)
-  * [Provider - $appEnvironmentProvider](#provider)
-  * [Service - $appEnvironment](#service)
+  * [$appEnvironmentProvider](#provider)
+  * [$appEnvironment](#service)
 
 
-## Installation
+## Get it
 
-Install using **Bower**
-```sh
-$ bower install angular-environment-config --save
-```
+* Download the [source](https://raw.githubusercontent.com/luminous-patterns/angular-environment-config/master/release/angular-environment-config.js) ([minified](https://raw.githubusercontent.com/luminous-patterns/angular-environment-config/master/release/angular-environment-config.min.js));
+* Install using **[npm](https://npmjs.org)**: run `$ npm i angular-environment-config` from your console; or
+* Install using **[bower](http://bower.io)**: run `$ bower install angular-environment-config` from your console
 
-## Usage
+## Use it
 
-1. Add it as a dependency for your AngularJS app
-2. Configure your environments during config phase using the `$environmentConfigProvider`
-3. Access the config variables for the current environment via the `$environmentConfig` service 
+1. Add `'luminous.environment'` to your main module's list of dependencies
+    ```javascript
+    angular.module('myWebApp', ['luminous.environment']);
+    ```
 
+2. Configure your environments during config phase using the `$appEnvironmentProvider`
+    ```javascript
+    $appEnvironmentProvider
+        .addEnvironment('local', ['127.0.0.1', 'localhost', /\.local$/i], {});
+    ```
 
-## Example
+3. Set default properties for all environments using `$appEnvironmentProvider.setDefaults()`
+    ```javascript
+    $appEnvironmentProvider
+        .setDefaults({ titlePrefix: '', apiUrl: '/api/' });
+    ```
+
+4. Access the *readonly* config variables for the current environment using the `$appEnvironment` service via the `config` property.
+    ```javascript
+    $document[0].title = $appEnvironment.config.titlePrefix + 'My App';
+    ```
+
+## Stare intently at this example of it
 
 ```javascript
 angular.module('myWebApp', [
@@ -85,25 +101,29 @@ function MainViewController (  $appEnvironment,   $document) {
 }
 ```
 
+------------------
 ## API
+------------------
 
 ### Provider
 
-#### $appEnvironmentProvider.addEnvironment(String *`environmentName`*, Array|String|RegExp *`hostnames`*, Object *`config`*)
-*Returns $appEnvironmentProvider* --- Adds a new environment *`config`* -- identified by *`environmentName`* -- that will be used when `window.location.hostname` matches one of the values provided in *`hostnames`*.
+-----------------
+
+### $appEnvironmentProvider
+
+-----------------
+
+#### addEnvironment(environmentName, hostnames, config)
+Adds a new environment *`config`* -- identified by *`environmentName`* -- that will be used when the Angular app's `$location.host()` matches one of the `String`s or `RegExp`s provided in *`hostnames`*.
 
 ```javascript
 $appEnvironmentProvider
     .addEnvironment('local', ['127.0.0.1', 'localhost', /\.local$/i], {
+        // Local environment would match '127.0.0.1', 'localhost', and any
+        // hostname that ends with .local
         titlePrefix: 'LOCAL :: ',
         apiUrl: 'http://localhost:7331/',
-    });
-```
-
-Strings and RegExps are also acceptable values for the *`hostnames`* argument.
-
-```javascript
-$appEnvironmentProvider
+    })
     .addEnvironment('testing', 'test.my-app.com', {
         // Testing environment would match 'test.my-app.com'
         titlePrefix: 'TESTING :: ',
@@ -116,8 +136,27 @@ $appEnvironmentProvider
     });
 ```
 
-#### $appEnvironmentProvider.useConfigFor(String *`environmentName`*).whenHostnameMatches(RegExp *`regExp`*)
-*Returns $appEnvironmentProvider* --- Specify the *`environmentName`* to use when the hostname matches *`regExp`*.
+###### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**environmentName** | `String` | The internal name for this environment (e.g. local)
+**hostnames** | `String` `RegExp` `Array` | Hostname `String` or `RegExp` or an `Array` of such, used to match against `$location.host()`.
+**config** | `Object` | The environment configuration, to be applied to a new `AppEnvironmentConfig` on top of any defaults specified via `$appEnvironmentProvider.setDefault()`.
+
+###### Returns
+
+*`$appEnvironmentProvider`*
+
+###### Example
+
+
+
+-----------------
+
+#### useConfigFor(environmentName).whenHostnameMatches(hostname)
+
+Specify the *`environmentName`* to use when the hostname matches *`hostname`*.
 
 ```javascript
 $appEnvironmentProvider
@@ -125,8 +164,23 @@ $appEnvironmentProvider
         .whenHostnameMatches(/^preview\.[a-z0-9-]{3,}\.my-app.com/i);
 ```
 
-#### $appEnvironmentProvider.defaultEnvironmentName(String *`environmentName`*)
-*Returns $appEnvironmentProvider* --- Specify the *`environmentName`* to fall back on when none of the specified environment hostnames match the current hostname.
+###### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**environmentName** | `String` | The internal name of the environment (e.g. local)
+**hostname** | `String` `RegExp` | Hostname `String` or `RegExp` for matching against `$location.host()`
+
+###### Returns
+
+*`$appEnvironmentProvider`*
+
+
+
+-----------------
+
+#### defaultEnvironmentName(environmentName)
+Specify the *`environmentName`* to fall back on when none of the specified environment hostnames match the current hostname.
 
 ```javascript
 $appEnvironmentProvider
@@ -135,16 +189,12 @@ $appEnvironmentProvider
 
 ***Important note:*** If a default environment name is not specified, the $appEnvironment service will throw an `EnvLookupError` during init.
 
-#### $appEnvironmentProvider.setDefault(String *`key`*, Mixed *`value`*)
-*Returns $appEnvironmentProvider* --- Set the default *`value`* for *`key`* in `$appEnvironment.config`.
 
-```javascript
-$appEnvironmentProvider
-    .setDefault('apiUrl', '/api/');
-```
 
-#### $appEnvironmentProvider.setDefaults(Object *`properties`*)
-*Returns $appEnvironmentProvider* --- Set multiple default values for `$appEnvironment.config` at once.
+-----------------
+
+#### setDefaults(properties)
+Set multiple default *`properties`* for `$appEnvironment.config` at once.
 
 ```javascript
 $appEnvironmentProvider
@@ -154,10 +204,58 @@ $appEnvironmentProvider
     });
 ```
 
+###### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**properties** | `Object` | Default properties to add to `$appEnvironment.config` for all environments.
+
+###### Returns
+
+*`$appEnvironmentProvider`*
+
+
+
+-----------------
+
+#### setDefault(key, value)
+Specify a default *`value`* for *`key`* in `$appEnvironment.config`
+
+```javascript
+$appEnvironmentProvider
+    .setDefault('apiUrl', '/api/');
+```
+
+
+###### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**key** | `String` | The property name
+**value** | `*` | The default value
+
+
+###### Returns
+
+*`$appEnvironmentProvider`*
+
+
+
+
+
+
+------------------
+
 ### Service
 
-#### $appEnvironment.is(String *`environmentName`*)
-*Returns Boolean* --- `true` if the current environment name is *`environmentName`*, otherwise `false`.
+-----------------
+
+### $appEnvironment
+
+-----------------
+
+#### is(environmentName)
+Determine if *`environmentName`* is the name of the current environment.
 
 ```javascript
 if (!$appEnvironment.is('production')) {
@@ -165,8 +263,22 @@ if (!$appEnvironment.is('production')) {
 }
 ```
 
-#### $appEnvironment.environmentName
-*String* --- The name of the current environment
+##### Arguments
+
+Parameter | Type | Description
+----------|------|------------
+**environmentName** | `String` | The name of the environment
+
+###### Returns
+
+*`Boolean`* --- `true` if the current environment name is *`environmentName`*, otherwise `false`.
+
+
+
+-----------------
+
+#### environmentName
+*`String`* --- The name of the current environment
 
 ```javascript
 if ('testing' === $appEnvironment.environmentName) {
@@ -176,16 +288,24 @@ if ('testing' === $appEnvironment.environmentName) {
 }
 ```
 
-#### $appEnvironment.config
-*AppEnvironmentConfig* --- Configuration object for the current environment, values are read-only.
+
+
+-----------------
+
+#### config
+*`AppEnvironmentConfig`* --- Configuration object for the current environment, values are read-only.
 
 ```javascript
 $document[0].title = $appEnvironment.config.titlePrefix + 
     'MyApp - Created by things, for things';
 ```
 
-#### $appEnvironment.hostname
-*String* -- The hostname of the current environment.
+
+
+-----------------
+
+#### hostname
+*`String`* -- The hostname of the current environment.
 
 ```javascript
 if ('localhost' === $appEnvironment.hostname) {
@@ -194,5 +314,15 @@ if ('localhost' === $appEnvironment.hostname) {
 }
 ```
 
-#### $appEnvironment.isDefault
-*Boolean* --- `true` if default environment configuration is being used, otherwise `false`.
+
+
+-----------------
+
+#### isDefault
+*`Boolean`* --- `true` if default environment configuration is being used, otherwise `false`.
+
+```javascript
+if (true === $appEnvironment.isDefault) {
+    // Logic that will only occur if the current environment is the environment specified in $appEnvironmentProvider.defaultEnvironmentName()
+}
+```

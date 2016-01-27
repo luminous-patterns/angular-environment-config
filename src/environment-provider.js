@@ -86,6 +86,12 @@ function $appEnvironmentProvider () {
 
     this.addEnvironment = function (environmentName, hostnames, config) {
 
+        if ('string' !== typeof environmentName) {
+            throw new TypeError(
+                '1st argument must be a string'
+            );
+        }
+
         if (hasConfigForEnvironment(environmentName)) {
             throw new EnvAlreadyExistsError({
                 environmentName: environmentName,
@@ -110,6 +116,13 @@ function $appEnvironmentProvider () {
     };
 
     this.useConfigFor = function (environmentName) {
+
+        if ('string' !== typeof environmentName) {
+            throw new TypeError(
+                '1st argument must be a string'
+            );
+        }
+
         return {
             whenHostnameMatches: function (hostname) {
 
@@ -122,6 +135,7 @@ function $appEnvironmentProvider () {
 
             },
         };
+
     };
 
     this.unsetDefaultEnvironmentName = function () {
