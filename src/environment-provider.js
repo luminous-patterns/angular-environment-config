@@ -216,7 +216,7 @@ function $appEnvironmentProvider () {
                     'config': config,
                 };
 
-                addReadonly(props).to(this);
+                addEnumerable(props).to(this);
 
             }
 

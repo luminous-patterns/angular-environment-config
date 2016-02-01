@@ -2,7 +2,7 @@ AppEnvironmentConfigFactory.$inject = [];
 function AppEnvironmentConfigFactory () {
 
     function AppEnvironmentConfig (props) {
-        addReadonly(props).to(this);
+        addEnumerable(props).to(this);
     }
 
     return AppEnvironmentConfig;

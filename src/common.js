@@ -9,9 +9,9 @@ var ERR_NO_SUCH_ENVIRONMENT = 'ERR_NO_SUCH_ENVIRONMENT';
 var ERR_ENVIRONMENT_ALREADY_EXISTS = 'ERR_ENVIRONMENT_ALREADY_EXISTS';
 
 
-/* Read-only property setter */
+/* Enumerable property setter */
 
-function addReadonly (props) {
+function addEnumerable (props) {
 
     return {
 
@@ -22,9 +22,7 @@ function addReadonly (props) {
 
                 Object.defineProperty(object, key, {
                     value: props[key],
-                    writable: false,
                     enumerable: true,
-                    configurable: false,
                 });
 
             });
